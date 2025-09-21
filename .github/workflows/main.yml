@@ -17,3 +17,8 @@ jobs:
        cache: maven
     - name: build the java code
       run: mvn clean install package
+    - name: Upload artifact from runner to github repo 
+      uses: actions/upload-artifact@v4
+      with:
+       name: jacoco
+       path: /home/runner/work/SonarQubeCoverageJava-sep/SonarQubeCoverageJava-sep/target/jacoco.exec
