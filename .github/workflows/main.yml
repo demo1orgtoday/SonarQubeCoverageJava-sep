@@ -1,24 +1,23 @@
-name: build java Application
+--- 
+
+name: python workflow
 on:
  push:
-  branches:
-   - master
 jobs:
-  buildjob:
+  job1:
    runs-on: ubuntu-latest
    steps:
-    - name: Clone the repo
+    - name: Checkout code
       uses: actions/checkout@v4
-    - name: Install java 17
-      uses: actions/setup-java@v4
+    - name: Setup python 3.9
+      uses: actions/setup-python@v5
       with:
-       java-version: '17'
-       distribution: 'temurin'
-       cache: maven
-    - name: build the java code
-      run: mvn clean install package
-    - name: Upload artifact from runner to github repo 
-      uses: actions/upload-artifact@v4
-      with:
-       name: jacoco
-       path: /home/runner/work/SonarQubeCoverageJava-sep/SonarQubeCoverageJava-sep/target/jacoco.exec
+       python-version: '3.9'
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Set pythonPath
+      run: echo "PYTHONPATH"=$GITHUB_WORKSPACE >> $GITHUB_ENV
+    - name: Run tests
+      run: pytest tests --cov=app --cov-report=xml
